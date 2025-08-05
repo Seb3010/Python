@@ -1,23 +1,39 @@
 import time
 import math
 
-def suma(a, b):
-    return round(a + b, 2)
+def suma(*numeros):
+    if len(numeros) < 2:
+        return "Se requieren al menos dos números"
+    return round(sum(numeros), 2)
 
 
-def resta(a, b):
-    return round(a - b, 2)
+def resta(*numeros):
+    if len(numeros) < 2:
+        return "Se requieren al menos dos números"
+    resultado = numeros[0]
+    for n in numeros[1:]:
+        resultado -= n
+    return round(resultado, 2)
 
 
-def multiplicacion(a, b):
-    return round(a * b, 2)
+def multiplicacion(*numeros):
+    if len(numeros) < 2:
+        return "Se requieren al menos dos números"
+    resultado = 1
+    for n in numeros:
+        resultado *= n
+    return round(resultado, 2)
 
 
-def division(a, b):
-    if b != 0:
-        return round(a / b, 2)
-    else:
-        return 0
+def division(*numeros):
+    if len(numeros) < 2:
+        return "Se requieren al menos dos números"
+    resultado = numeros[0]
+    for n in numeros[1:]:
+        if n == 0:
+            return "Error: división por cero"
+        resultado /= n
+    return round(resultado, 2)
 
 def potencia(a):
     return round(pow(a, 2), 2)
