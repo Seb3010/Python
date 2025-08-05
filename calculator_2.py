@@ -55,28 +55,57 @@ def calculadora():
     print("5. potencia")
     print("6. raiz cuadrada")
 
-
 while True:
     calculadora()
-    opcion = int(input("elige opcion "))
+    try:
+        opcion = int(input("elige opcion "))
+    except ValueError:
+        print("Por favor, ingresa una opción válida.")
+        continue
 
     if opcion in [1, 2, 3, 4]:
-        num1 = float(input("ingresa el primer numero "))
-        num2 = float(input("ingresa el segundo numero "))
-    if opcion == 1:
-        print(f"resultado {suma(num1, num2)}")
-    elif opcion == 2:
-        print(f"resultado {resta(num1, num2)}")
-    elif opcion == 3:
-        print(f"resultado {multiplicacion(num1, num2)}")
-    elif opcion == 4:
-        print(f"resultado {division(num1, num2)}")
+        while True:
+            try:
+                cantidad = int(input("¿Cuántos números quieres ingresar? "))
+                if cantidad < 2:
+                    print("Debes ingresar al menos dos números.")
+                    continue
+                break
+            except ValueError:
+                print("Por favor, ingresa un número válido.")
+                continue
+
+        numeros = []
+        for i in range(cantidad):
+            while True:
+                try:
+                    n = float(input(f"Ingrese el número {i+1}: "))
+                    numeros.append(n)
+                    break
+                except ValueError:
+                    print("Por favor, ingresa un número válido.")
+                    continue
+
+        if opcion == 1:
+            print(f"resultado {suma(*numeros)}")
+        elif opcion == 2:
+            print(f"resultado {resta(*numeros)}")
+        elif opcion == 3:
+            print(f"resultado {multiplicacion(*numeros)}")
+        elif opcion == 4:
+            print(f"resultado {division(*numeros)}")
     elif opcion in [5, 6]:
-        num1 = float(input("ingresa el numero "))
-    if opcion == 5:
-        print(f"resultado {potencia(num1)}")
-    elif opcion == 6:
-        print(f"resultado {raiz_cuadrada(num1)}")
+        while True:
+            try:
+                num1 = float(input("ingresa el numero "))
+                break
+            except ValueError:
+                print("Por favor, ingresa un número válido.")
+                continue
+        if opcion == 5:
+            print(f"resultado {potencia(num1)}")
+        elif opcion == 6:
+            print(f"resultado {raiz_cuadrada(num1)}")
 
     time.sleep(3)
     desicion = input("¿Deseas continuar? ")
