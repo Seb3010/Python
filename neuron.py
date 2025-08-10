@@ -92,4 +92,4 @@ if __name__ == "__main__":
             #mostramos el error
             print(f"Error en la iteracion {_}: {error}")
     #mostramos los resultados finales
-    print(f"Pesos finales: {neuron.weights}, Sesgo: {n.bias}, Salida: {n.forwards(inputs)}")
+    print(f"Pesos finales: {neuron.weights}, Sesgo: {neuron.bias}, Salida: {neuron.forward(inputs)}")
