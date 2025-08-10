@@ -1,123 +1,92 @@
-from tkinter import *
-from tkinter import ttk
+import tkinter as tk
+from tkinter import messagebox
+import math
 
-color1 = "#202020"
-color2 = "#ffffff"
-color3 = "#323232"
-color4 = "#3c3c3c"
-color5 = "#4cc2ff"
-color6 = "#47b1e8"
-color7 = "#000000"
+def calcular():
+    operacion = var_opcion.get()
+    entradas = entry_numeros.get()
 
+    # Convertir la entrada en lista de números (separados por comas)
+    try:
+        numeros = [float(x.strip()) for x in entradas.split(",") if x.strip() != '']
+    except ValueError:
+        messagebox.showerror("Error", "Ingresa solo números separados por comas")
+        return
 
-window = Tk()
-window.title("Calculadora")
-window.geometry("323x395")
-window.config(bg=color1)
+    if operacion in ["suma", "resta", "multiplicacion", "division"]:
+        if len(numeros) < 2:
+            messagebox.showerror("Error", "Se requieren al menos dos números")
+            return
 
+    if operacion == "suma":
+        resultado = round(sum(numeros), 2)
 
-frameDisplay = Frame(window, width=323, height=120, bg=color2)
-frameDisplay.grid(row=0, column=0)
+    elif operacion == "resta":
+        resultado = numeros[0]
+        for n in numeros[1:]:
+            resultado -= n
+        resultado = round(resultado, 2)
 
-frameKeyboard = Frame(window, width=323, height=250, bg=color1)
-frameKeyboard.grid(row=1, column=0)
+    elif operacion == "multiplicacion":
+        resultado = 1
+        for n in numeros:
+            resultado *= n
+        resultado = round(resultado, 2)
 
-frameFooter = Frame(window, width=323, height=15, bg=color1)
-frameFooter.grid(row=2, column=0)
+    elif operacion == "division":
+        resultado = numeros[0]
+        for n in numeros[1:]:
+            if n == 0:
+                messagebox.showerror("Error", "No se puede dividir entre cero")
+                return
+            resultado /= n
+        resultado = round(resultado, 2)
 
+    elif operacion == "potencia":
+        if len(numeros) != 1:
+            messagebox.showerror("Error", "Solo ingresa un número para potencia")
+            return
+        resultado = round(pow(numeros[0], 2), 2)
 
+    elif operacion == "raiz":
+        if len(numeros) != 1:
+            messagebox.showerror("Error", "Solo ingresa un número para raíz cuadrada")
+            return
+        if numeros[0] < 0:
+            messagebox.showerror("Error", "No se puede calcular la raíz cuadrada de un número negativo")
+            return
+        resultado = round(math.sqrt(numeros[0]), 2)
 
-showValue = StringVar()
-values = ''
+    label_resultado.config(text=f"Resultado: {resultado}")
 
-def inputValue(event):
-   global values
-   
-   values = values + str(event)
-   
+# Ventana principal
+root = tk.Tk()
+root.title("Calculadora con Tkinter")
 
-   showValue.set(values)
+# Variable para la opción seleccionada
+var_opcion = tk.StringVar(value="suma")
 
+# Opciones para la operación
+operaciones = [("Suma", "suma"), 
+              ("Resta", "resta"), 
+              ("Multiplicación", "multiplicacion"),
+              ("División", "division"),
+              ("Potencia (al cuadrado)", "potencia"),
+              ("Raíz cuadrada", "raiz")]
 
-def calculate():
-   global values
-   
-   result = eval(values)
-   showValue.set(str(result))
-   values = str(result)
+tk.Label(root, text="Selecciona la operación:").pack()
 
+for texto, valor in operaciones:
+    tk.Radiobutton(root, text=texto, variable=var_opcion, value=valor).pack(anchor="w")
 
-def clean():
-   global values
-   
-   values = ''
-   showValue.set('')
-   
+tk.Label(root, text="Ingresa números separados por coma (,):").pack()
+entry_numeros = tk.Entry(root, width=40)
+entry_numeros.pack()
 
-labelScreen = Label(frameDisplay, textvariable=showValue, bg=color1, fg=color2, font=("Ivy 24 bold"), width=16, padx=8, pady=40, justify="right", anchor="e", relief="flat")
-labelScreen.pack()
+boton = tk.Button(root, text="Calcular", command=calcular)
+boton.pack(pady=10)
 
-labelFooter = Label(frameFooter, text="V.: 1.3.2", bg=color1, fg=color2, font=("Ivy 9"), width=44, padx=8, justify="right", anchor="e")
-labelFooter.pack()
+label_resultado = tk.Label(root, text="Resultado: ")
+label_resultado.pack()
 
-
-btn1 = Button(frameKeyboard, command = clean, text="C", width=17, height=2, bg=color3, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color4, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn1.place(x=0, y=0)
-
-btn2 = Button(frameKeyboard, command = lambda: inputValue('%'), text="%", width=8, height=2, bg=color3, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color4, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn2.place(x=162, y=0)
-
-btn3 = Button(frameKeyboard, command = lambda: inputValue('/'), text="/", width=8, height=2, bg=color3, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color4, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn3.place(x=243, y=0)
-
-
-btn4 = Button(frameKeyboard, command = lambda: inputValue('7'), text="7", width=8, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn4.place(x=0, y=49)
-
-btn5 = Button(frameKeyboard, command = lambda: inputValue('8'), text="8", width=8, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn5.place(x=81, y=49)
-
-btn6 = Button(frameKeyboard, command = lambda: inputValue('9'), text="9", width=8, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn6.place(x=162, y=49)
-
-btn7 = Button(frameKeyboard, command = lambda: inputValue('*'), text="x", width=8, height=2, bg=color3, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color4, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn7.place(x=243, y=49)
-
-
-btn8 = Button(frameKeyboard, command = lambda: inputValue('4'), text="4", width=8, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn8.place(x=0, y=98)
-
-btn9 = Button(frameKeyboard, command = lambda: inputValue('5'), text="5", width=8, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn9.place(x=81, y=98)
-
-btn10 = Button(frameKeyboard, command = lambda: inputValue('6'), text="6", width=8, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn10.place(x=162, y=98)
-
-btn11 = Button(frameKeyboard, command = lambda: inputValue('-'), text="-", width=8, height=2, bg=color3, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color4, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn11.place(x=243, y=98)
-
-
-btn12 = Button(frameKeyboard, command = lambda: inputValue('1'), text="1", width=8, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn12.place(x=0, y=147)
-
-btn13 = Button(frameKeyboard, command = lambda: inputValue('2'), text="2", width=8, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn13.place(x=81, y=147)
-
-btn14 = Button(frameKeyboard, command = lambda: inputValue('3'), text="3", width=8, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn14.place(x=162, y=147)
-
-btn15 = Button(frameKeyboard, command = lambda: inputValue('+'), text="+", width=8, height=2, bg=color3, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color4, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn15.place(x=243, y=147)
-
-
-btn16 = Button(frameKeyboard, command = lambda: inputValue('0'), text="0", width=17, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn16.place(x=0, y=196)
-
-btn17 = Button(frameKeyboard, command = lambda: inputValue('.'), text=".", width=8, height=2, bg=color4, fg=color2, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color3, activeforeground=color2, highlightthickness=0, borderwidth=0)
-btn17.place(x=162, y=196)
-
-btn18 = Button(frameKeyboard, command = calculate, text="=", width=8, height=2, bg=color5, fg=color7, font=("Ivy 11 bold"), relief="flat", overrelief="raised", activebackground=color6, activeforeground=color7, highlightthickness=0, borderwidth=0)
-btn18.place(x=243, y=196)
-
-
-window.mainloop()
+root.mainloop()
