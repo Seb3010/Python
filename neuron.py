@@ -78,10 +78,10 @@ class Neuron:
 #definimos una clase de capa
 class Layer:
     #metodo que inicializa la capa 
-    def __init__(self, num_inputs, num_neurons):
+    def __init__(self, num_neurons, num_inputs_per_neuron):
         # Creamos una lista de neuronas llamada "neurons" que contiene "num_neurons" objetos de la clase Neuron
         #cada neurona se inicializa con "num_inputs_per_neuron" entradas (pesos)
-        self.neurons = [Neuron(num_inputs) for _ in range(num_neurons)]
+        self.neurons = [Neuron(num_inputs_per_neuron) for _ in range(num_neurons)]
     #metodo que calcula la salida de la capa
     def forward(self, inputs):
         #esta funcion envia las mismas entradas a cada neurona de la capa
@@ -109,25 +109,26 @@ class Layer:
 #ejemplo de uso
 #esto se ejecuta si corremos este archivo directamente
 if __name__ == "__main__":
-    #creamos una neurona con 4 entradas (puedes cambiar el numero)
-    neuron = Neuron(4)
-    #definimos un ejemplo de entradas (cuatro valores)
-    inputs = np.array([0.2, 0.5, 0.1, 0.9])
+    #creamos una capa con 2 neuronas y 3 entradas cada una
+    layer = Layer(num_neurons=2,num_inputs_per_neuron=3)
+    #definimos un ejemplo de entradas
+    inputs = np.array([0.5, 0.8, 0.2])
     #este es el valor que queremos predecir
-    target = 1
+    targets = np.array([1, 1])
 
     #parametros  para el learning rate dinamico
     initial_lr = 0.1    #learning rate inicial
     decay_rate = 1e-8   #tasa a la que se reduce el learning rate cada iteracion
     
-    #entrenamos la neurona por 100000 iteraciones
+    #entrenamos la capa por 1000 iteraciones
     #el "_" se usa cuando no necesitamos el valor de la iteracion
-    for _ in range(100_000_000):   
+    for _ in range(50_000_000):   
         #llamamos al metodo train
-        error = neuron.train(inputs, target)
-        #cada 10000 iteraciones mostramos el error
-        if _ % 1_000_000 == 0:
+        error = layer.train(inputs, targets)
+        #cada 100 iteraciones mostramos el error
+        if _ % 1_000 == 0:
             #mostramos el error
             print(f"Error en la iteracion {_}: {error}")
     #mostramos los resultados finales
-    print(f"Pesos finales: {neuron.weights}, Sesgo: {neuron.bias}, Salida: {neuron.forward(inputs)}")
+    for i, neuron in enumerate(layer.neurons):
+        print(f"Pesos finales neurona {i}: {neuron.weights}, Sesgo: {neuron.bias}, Salida: {neuron.forward(inputs)}")
