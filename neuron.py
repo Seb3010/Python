@@ -58,9 +58,11 @@ class Neuron:
         output = self.forward(inputs)
         #calculamos el error: diferencia entre el valor esperado (target) y la salida
         error = target - output
+        #calculamos el ajuste usando la derivada de la funcion de activacion
+        total_input = np.dot(inputs, self.weights) + self.bias
         #backpropagation: ajustamos los pesos segun el error
         #adjustment: usa la derivada para saber como cambiar los pesos
-        adjustment = error * self.derivate_activate(np.dot(inputs, self.weights) + self.bias)
+        adjustment = error * self.derivate_activate(total_input)
         #calculamos el cambio en los pesos usando las entradas guardadas
         self.dweights = learning_rate * adjustment * self.input
         #actualizamos los pesos sumando el cambio
@@ -73,22 +75,58 @@ class Neuron:
         #devolvemos el error para ver como mejora el modelo
         return error
 
-#ejomplo de uso
+#definimos una clase de capa
+class Layer:
+    #metodo que inicializa la capa 
+    def __init__(self, num_inputs, num_neurons):
+        # Creamos una lista de neuronas llamada "neurons" que contiene "num_neurons" objetos de la clase Neuron
+        #cada neurona se inicializa con "num_inputs_per_neuron" entradas (pesos)
+        self.neurons = [Neuron(num_inputs) for _ in range(num_neurons)]
+    #metodo que calcula la salida de la capa
+    def forward(self, inputs):
+        #esta funcion envia las mismas entradas a cada neurona de la capa
+        #usamos una lista por compresion para llamar al metodo "forward" de cada neurona
+        #cada neurona calcula su salida de forma independiente
+        outputs = [neuron.forward(inputs) for neuron in self.neurons]
+        #convertimos la lista de salidas en un array de numpy para facilitar posteriores
+        return np.array(outputs)
+
+    #metodo que entrena la capa
+    def train(self, inputs, targets, learning_rate=0.1):
+        #esta funcion entrena cada neurona de la capa
+        #"inputs" son las entradas comunes para todas las neuronas
+        #"targets" son los valores que queremos predecir para cada neurona
+        errors = [] #aqui guardamos el error de cada neurona
+        #iteramos simultaneamente sobre las neuronas y su target correspondiente
+        for neuron, target in zip(self.neurons, targets):
+            #entrenamos la neurona con los inputs y su target
+            error = neuron.train(inputs, target, learning_rate)
+            #guardamos el error de la neurona
+            errors.append(error)
+            #devolvemos los errores como un array para poder analizarlos facilmente
+        return np.array(errors)
+
+#ejemplo de uso
 #esto se ejecuta si corremos este archivo directamente
 if __name__ == "__main__":
-    #creamos una neurona con 2 entradas (puedes cambiar el numero)
-    neuron = Neuron(2)
-    #definimos un ejemplo de entradas (dos valores)
-    inputs = np.array([0.5, 0.8])
+    #creamos una neurona con 4 entradas (puedes cambiar el numero)
+    neuron = Neuron(4)
+    #definimos un ejemplo de entradas (cuatro valores)
+    inputs = np.array([0.2, 0.5, 0.1, 0.9])
     #este es el valor que queremos predecir
     target = 1
-    #entrenamos la neurona por 12000 iteraciones
+
+    #parametros  para el learning rate dinamico
+    initial_lr = 0.1    #learning rate inicial
+    decay_rate = 1e-8   #tasa a la que se reduce el learning rate cada iteracion
+    
+    #entrenamos la neurona por 100000 iteraciones
     #el "_" se usa cuando no necesitamos el valor de la iteracion
-    for _ in range(500000):
+    for _ in range(100_000_000):   
         #llamamos al metodo train
         error = neuron.train(inputs, target)
-        #cada 10 iteraciones mostramos el error
-        if _ % 10 == 0:
+        #cada 10000 iteraciones mostramos el error
+        if _ % 1_000_000 == 0:
             #mostramos el error
             print(f"Error en la iteracion {_}: {error}")
     #mostramos los resultados finales
