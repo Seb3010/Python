@@ -84,7 +84,7 @@ if __name__ == "__main__":
     target = 1
     #entrenamos la neurona por 100 iteraciones
     #el "_" se usa cuando no necesitamos el valor de la iteracion
-    for _ in range(100):
+    for _ in range(150):
         #llamamos al metodo train
         error = neuron.train(inputs, target)
         #cada 10 iteraciones mostramos el error
