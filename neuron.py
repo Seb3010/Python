@@ -92,7 +92,7 @@ class Layer:
         return np.array(outputs)
 
     #metodo que entrena la capa
-    def train(self, inputs, targets, learning_rate=0.1):
+    def train(self, inputs, targets, learning_rate=0.5):
         #esta funcion entrena cada neurona de la capa
         #"inputs" son las entradas comunes para todas las neuronas
         #"targets" son los valores que queremos predecir para cada neurona
@@ -117,16 +117,16 @@ if __name__ == "__main__":
     targets = np.array([1, 1])
 
     #parametros  para el learning rate dinamico
-    initial_lr = 0.1    #learning rate inicial
+    initial_lr = 0.5    #learning rate inicial
     decay_rate = 1e-8   #tasa a la que se reduce el learning rate cada iteracion
-    
-    #entrenamos la capa por 1000 iteraciones
+
+    #entrenamos la capa por 50,000,000 iteraciones
     #el "_" se usa cuando no necesitamos el valor de la iteracion
     for _ in range(50_000_000):   
         #llamamos al metodo train
         error = layer.train(inputs, targets)
-        #cada 100 iteraciones mostramos el error
-        if _ % 1_000 == 0:
+        #cada 50,000 iteraciones mostramos el error
+        if _ % 50_000 == 0:
             #mostramos el error
             print(f"Error en la iteracion {_}: {error}")
     #mostramos los resultados finales
