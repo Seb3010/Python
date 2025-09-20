@@ -24,3 +24,6 @@ while True:
         date = today.strftime("%B %d, %Y")
         engine.say(f"hoy es, {date}")
         engine.runAndWait()
+    elif command.lower() in ["quien te creo?"]:
+        engine.say("fui creado por el super pro programador sebas")
+        engine.runAndWait()
