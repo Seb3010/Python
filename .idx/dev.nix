@@ -10,6 +10,7 @@
     pkgs.python311
     pkgs.python311Packages.pip
     pkgs.python311Packages.pyttsx3
+    pkgs.python311Packages.numpy
     # pkgs.nodejs_20
     # pkgs.nodePackages.nodemon
   ];
