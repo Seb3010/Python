@@ -8,7 +8,6 @@ nltk.download('punkt')
 nltk.download('stopwords')
 
 GEMINI_API_KEY = "AIzaSyA2BiPDCzDZwkJS-pqJ_4z_2wGZd8t3fLQ"
-
 client = genai.Client(api_key=GEMINI_API_KEY) 
 
 while True:
@@ -17,8 +16,6 @@ while True:
     stop_words = set(stopwords.words("spanish"))
 
     filter_words = (words for word in words if word.lower not in stop_words)
-
-    
 
     if pregunta == "salir":
         break
