@@ -10,6 +10,8 @@ nltk.download('stopwords')
 GEMINI_API_KEY = "AIzaSyA2BiPDCzDZwkJS-pqJ_4z_2wGZd8t3fLQ"
 client = genai.Client(api_key=GEMINI_API_KEY) 
 
+chat = client.chats.create(model="gemini-2.0-flash")
+
 while True:
     pregunta = input("En que puedo ayudarte? ")
     words = word_tokenize(pregunta)
@@ -28,7 +30,7 @@ while True:
 
     response = client.models.generate_content(
         model="gemini-2.5-flash",
-        contents=pregunta
+        contents=pregunta,
     )
 
     print(f"\nRespuesta: {response.text} ")
