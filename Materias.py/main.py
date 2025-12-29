@@ -1,13 +1,14 @@
 from materias import signature
 
-ticket = []
-
-while True:
+def pedir_nombre_materia():
     while True:
         input_name = input("Ingrese el nombre de la materia: ").strip()
         if input_name != "":
             break
         print("Por favor, introduce un nombre válido.")
+    return input_name
+
+def pedir_calificacion():
     while True:
         try:
             input_grade = int(input("Ingrese la calificacion: "))
@@ -19,8 +20,15 @@ while True:
         except ValueError:
             print("Por favor, introduce un numero valido.")
             continue
+    return input_grade
 
-    status = signature(input_name, input_grade)
+ticket = []
+
+while True:
+    name = pedir_nombre_materia()
+    grade = pedir_calificacion()
+
+    status = signature(name, grade)
 
     ticket.append(status)
 
