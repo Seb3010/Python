@@ -32,14 +32,13 @@ while True:
 
     ticket.append(status)
 
-    suma = 0
     continuar = input("¿Desea agregar otra materia? (s/n): ")
     if continuar.lower() == "n":
         break
     else:
         continue
 
-
+suma = 0
 for materia in ticket:
     print(f"Materia: {materia.name} | Nota: {materia.grade}")
     suma += materia.grade
