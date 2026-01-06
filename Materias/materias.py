@@ -9,5 +9,3 @@ class signature:
         else:
             return "Reprobado"
 
-    def average(self):
-        return sum(grades) / len(signatures)
