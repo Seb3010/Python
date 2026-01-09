@@ -3,14 +3,23 @@ class Student:
         self.name = name
         self.grades = []
 
-    def add_grades(self, grade):
-        self.grades.append(grade)
+    def add_grades(self, grade, signature):
+        self.grades.append([grade, signature])
 
     def get_average(self):
         try:
-            return sum(self.grades) / len(self.grades)
+            suma_total = 0
+            for i in self grades:
+                suma_total += i[1]
+
+            average = suma_total / len(self.grades)
+
+            if average >= 6:
+                status = "aprobado"
+            else status = "reprobado"
+            return (average, status)
         except ZeroDivisionError:
-            return 0
+            return (0, "sin calificacion")
 
     def keep(self):
         with open("reporte.txt", "a") as archivo:
